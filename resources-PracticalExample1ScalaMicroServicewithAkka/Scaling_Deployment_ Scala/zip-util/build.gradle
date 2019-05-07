@@ -1,0 +1,43 @@
+apply plugin: 'scala'
+def mainClassName = "com.eduonix.util.UtilsRunner"
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url "https://repo.typesafe.com/typesafe/maven-releases"
+    }
+
+    ivy {
+        name "typesafe-ivy-release"
+        url "https://repo.typesafe.com/typesafe/ivy-releases"
+        layout "ivy"
+    }
+
+}
+
+dependencies {
+
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'commons-codec:commons-codec:1.10'
+    compile 'org.apache.commons:commons-io:1.3.2'
+    compile 'com.typesafe.akka:akka-actor_2.11:2.4.1'
+
+
+
+}
+
+
+
+task "create-dirs" << {
+    sourceSets*.scala.srcDirs*.each { it.mkdirs() }
+    sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
+
+
+
+task utilRunner(type: JavaExec) {
+    classpath = files('build/libs/zip-util-all-1.0-SNAPSHOT.jar')
+    classpath += sourceSets.main.runtimeClasspath
+    main = "com.eduonix.SockoServerApp"
+}

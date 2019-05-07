@@ -1,0 +1,23 @@
+
+apply plugin: 'scala'
+
+
+dependencies {
+ 	 
+    compile 'org.scala-lang:scala-library:2.11.0'
+
+}
+
+
+
+// packages the code as a jar as a dependency for the java code
+task deployAsDependency(type: Copy ) {
+
+    delete "deploy"
+    def file = new File("build/libs/${project.name}-${version}.jar")
+    println "path= $file.absolutePath, exists= ${file.exists()}"
+    from(file)
+    into("deploy/")
+
+    }
+

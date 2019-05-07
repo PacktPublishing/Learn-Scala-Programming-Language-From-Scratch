@@ -1,0 +1,57 @@
+group 'akka-micro'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'scala'
+
+def mainClassName = "com.eduonix.SockoServerApp"
+
+
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url "https://repo.typesafe.com/typesafe/maven-releases"
+    }
+
+    ivy {
+        name "typesafe-ivy-release"
+        url "https://repo.typesafe.com/typesafe/ivy-releases"
+        layout "ivy"
+    }
+
+}
+
+dependencies {
+
+    compile 'org.mashupbots.socko:socko-webserver_2.11:0.6.0'
+
+
+}
+
+
+task "create-dirs" << {
+    sourceSets*.scala.srcDirs*.each { it.mkdirs() }
+    sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
+
+
+// creates the runtime jar
+task fatJar(type: Jar ) {
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    exclude 'META-INF/*.SF'
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
+        attributes 'Main-Class': "$mainClassName"
+    }
+}
+
+task serverRunner(type: JavaExec) {
+    classpath = files('build/libs/akka-micro-all-1.0-SNAPSHOT.jar')
+    classpath += sourceSets.main.runtimeClasspath
+    main = "com.eduonix.SockoServerApp"
+}

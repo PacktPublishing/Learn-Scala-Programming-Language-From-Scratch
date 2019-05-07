@@ -1,0 +1,28 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        mavenLocal()
+    }
+
+ }
+
+allprojects {   
+    
+    group 'multi-jvm'    
+    version "1.0.0"
+    
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+    apply plugin: 'scala'
+    
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+
+        compile 'org.scala-lang:scala-library:2.11.6'
+    }
+}

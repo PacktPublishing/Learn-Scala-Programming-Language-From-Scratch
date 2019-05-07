@@ -1,0 +1,56 @@
+apply plugin: 'scala'
+
+def mainClassName = "com.eduonix.logistic.BinClassRunner"
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url "https://repo.typesafe.com/typesafe/maven-releases"
+    }
+
+    ivy {
+        name "typesafe-ivy-release"
+        url "https://repo.typesafe.com/typesafe/ivy-releases"
+        layout "ivy"
+    }
+
+}
+
+dependencies {
+
+    compile 'com.google.guava:guava:18.0'    
+    compile 'org.apache.spark:spark-core_2.11:1.3.1'
+    compile 'org.apache.spark:spark-mllib_2.11:1.5.1'
+    compile 'org.apache.spark:spark-sql_2.11:1.5.1'
+
+
+}
+
+task fatJar(type: Jar ) {
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    exclude 'META-INF/*.SF'
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
+        attributes 'Main-Class': "$mainClassName"
+    }
+    zip64 = true
+}
+
+
+task serverRunner(type: JavaExec) {
+    classpath = files('build/libs/ml-all-1.0.0.jar')
+    classpath += sourceSets.main.runtimeClasspath
+    main = "com.eduonix.logistic.BinClassRunner"
+}
+
+
+
+task "create-dirs" << {
+    sourceSets*.scala.srcDirs*.each { it.mkdirs() }
+    sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
