@@ -1,0 +1,38 @@
+group 'scala-gradle'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'scala'
+
+
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url "https://repo.typesafe.com/typesafe/maven-releases"
+    }
+    maven {
+        url "https://repo.eclipse.org/content/repositories/paho-releases/"
+    }
+    ivy {
+        name "typesafe-ivy-release"
+        url "https://repo.typesafe.com/typesafe/ivy-releases"
+        layout "ivy"
+    }
+
+
+}
+
+dependencies {
+
+    compile 'org.scala-lang:scala-library:2.10.6'
+    compile 'com.rockymadden.stringmetric:stringmetric-core_2.10:0.27.3'
+    compile 'org.eclipse.paho:mqtt-client:0.4.0'
+
+}
+
+
+task "create-dirs" << {
+    sourceSets*.scala.srcDirs*.each { it.mkdirs() }
+    sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
