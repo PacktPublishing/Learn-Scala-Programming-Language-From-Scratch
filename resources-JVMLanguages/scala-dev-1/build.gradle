@@ -1,0 +1,54 @@
+group 'scala-dev-1'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'scala'
+
+/**
+ * To get joint compilation, you have to add some Java sources to the "scala"
+ * source directory set, and at the same time take them away from the
+ * "java" source directory set
+ * Ditto for groovy
+ */
+sourceSets.main.java.srcDirs = []
+
+sourceSets.main.groovy.srcDirs += ["src/main/java"]
+
+
+// == buildscript ==
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.11.1'
+    compile 'com.typesafe.akka:akka-actor_2.11:2.4.0'
+
+    compile 'org.codehaus.groovy:groovy-all:2.4.5'
+}
+
+
+task runScala(type: JavaExec, dependsOn: classes) {
+    main = 'com.sbeans.AkkaRunner'
+    classpath sourceSets.main.runtimeClasspath
+    classpath configurations.runtime
+}
+
+task runJava(type: JavaExec, dependsOn: classes) {
+    main = 'com.eduonix.MainRunner'
+    classpath sourceSets.main.runtimeClasspath
+    classpath configurations.runtime
+}

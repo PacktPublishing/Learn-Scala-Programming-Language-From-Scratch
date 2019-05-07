@@ -1,0 +1,26 @@
+apply plugin: 'java'
+
+
+dependencies {
+
+    compile 'com.google.guava:guava:18.0'
+    compile 'org.apache.spark:spark-core_2.11:1.5.1'
+    compile 'org.apache.spark:spark-mllib_2.11:1.5.1'
+    compile 'org.apache.spark:spark-sql_2.11:1.5.1'
+
+    compile 'org.apache.zookeeper:zookeeper:3.4.6'
+    compile 'org.apache.kafka:kafka_2.11:0.8.2.0'
+    compile 'org.apache.kafka:kafka-clients:0.8.2.1'
+
+
+
+    compile 'commons-io:commons-io:2.4'
+
+    compile fileTree(dir: 'lib',
+            include: '*.jar',
+
+    )
+
+ //   compile project(':spark_scala')
+
+}
